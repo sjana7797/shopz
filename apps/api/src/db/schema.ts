@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -107,4 +107,22 @@ export const invitations = pgTable("invitations", {
   inviterId: text("inviter_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+});
+
+// Apps
+export const apps = pgTable("apps", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").unique().notNull(),
+  logo: text("logo"),
+  metaData: text("meta_data").notNull(),
+  description: text("description").notNull(),
+  createdAt: timestamp("created_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
 });

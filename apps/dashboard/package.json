@@ -11,12 +11,15 @@
   "dependencies": {
     "@repo/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.0.6",
+    "@tanstack/react-query": "^5.66.3",
+    "hono": "^4.7.1",
+    "lucide-react": "^0.475.0",
     "next": "15.1.7",
+    "nextjs-toploader": "^3.7.15",
     "postcss": "^8.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.6",
-    "lucide-react": "^0.475.0"
+    "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -2,6 +2,7 @@ import { createApp } from "@api/utils/create-app";
 import { apiReference } from "@scalar/hono-api-reference";
 import healthRouter from "@api/routes/health";
 import { cors } from "hono/cors";
+import appsRoutes from "@api/routes/apps";
 
 const app = createApp();
 
@@ -28,7 +29,7 @@ app.get(
 );
 
 // Routes
-const routes = [healthRouter] as const;
+const routes = [healthRouter, appsRoutes] as const;
 
 routes.forEach((route) => app.route("/", route));
 

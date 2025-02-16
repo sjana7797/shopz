@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@repo/ui/styles.css";
+import NextTopLoader from "nextjs-toploader";
+import ApiClientProvider from "../components/api-client-provider";
 
 const font = Inter({
   subsets: ["latin"],
@@ -18,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className} antialiased`}>{children}</body>
+      <body className={`${font.className} antialiased`}>
+        <NextTopLoader />
+        <ApiClientProvider>{children}</ApiClientProvider>
+      </body>
     </html>
   );
 }

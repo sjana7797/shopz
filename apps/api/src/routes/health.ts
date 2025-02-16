@@ -1,9 +1,7 @@
 import { createRouter } from "@api/utils/create-app";
 import { createRoute, z } from "@hono/zod-openapi";
 
-const healthRouter = createRouter();
-
-healthRouter.openapi(
+const healthRouter = createRouter().openapi(
   createRoute({
     path: "/health",
     method: "get",

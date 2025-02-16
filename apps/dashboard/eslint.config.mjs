@@ -24,12 +24,12 @@ const eslintConfig = [
           type: "shared",
           pattern: [
             "src/components/**/*",
-            "src/layouts/**/*",
             "src/data/**/*",
             "src/drizzle/**/*",
             "src/hooks/**/*",
             "src/lib/**/*",
             "src/server/**/*",
+            "src/api/**/*",
             "src/types/**/*",
           ],
         },

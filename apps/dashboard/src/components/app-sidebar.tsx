@@ -12,7 +12,6 @@ import {
   Settings2,
   SquareTerminal,
   DollarSign,
-  ArrowBigLeft,
   ArrowLeft,
 } from "lucide-react";
 

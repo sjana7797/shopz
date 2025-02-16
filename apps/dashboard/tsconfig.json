@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/dashboard/*": ["./src/*"]
+      "@/dashboard/*": ["./src/*"],
+      "@api/*": ["../api/src/*"],
+      "@repo/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
