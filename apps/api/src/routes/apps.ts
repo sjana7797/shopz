@@ -1,9 +1,10 @@
 import { createRouter } from "@api/utils/create-app";
 import { OK } from "@api/utils/http/status-codes";
 import { createRoute, z } from "@hono/zod-openapi";
-import { AppSchema } from "@api/db/zod-schema";
-import { db } from "@api/db";
-import { apps as appsTable } from "@api/db/schema";
+import { AppSchema } from "@repo/database/zod-schema";
+import { db } from "@repo/database/index";
+import { apps as appsTable } from "@repo/database/schema";
+import type { TApp } from "@repo/database/types";
 
 const appsRoutes = createRouter().openapi(
   createRoute({
@@ -47,7 +48,7 @@ const appsRoutes = createRouter().openapi(
 
     if (appsData.length === 0) {
       return c.json({
-        apps: [],
+        apps: [] as TApp[],
         page,
         total: 0,
         nextCursor: null,

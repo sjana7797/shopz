@@ -7,28 +7,26 @@
     "start:prod": "bun --bun run dist/index.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@hono/zod-openapi": "^0.18.4",
     "@hono/zod-validator": "^0.4.3",
+    "@repo/common": "workspace:*",
+    "@repo/database": "workspace:*",
     "@scalar/hono-api-reference": "^0.5.173",
-    "@types/node": "^22.13.4",
     "better-auth": "^1.1.18",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.39.3",
-    "drizzle-zod": "^0.7.0",
     "hono": "^4.7.1",
     "hono-openapi": "^0.4.4",
-    "pg": "^8.13.3",
+    "openai": "^4.85.1",
     "zod": "^3.24.2",
     "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@types/bun": "^1.2.2",
-    "@types/pg": "^8.11.11",
-    "drizzle-kit": "^0.30.4",
     "eslint": "^9.20.1",
     "eslint-plugin-import": "^2.31.0",
     "globals": "^15.15.0",
-    "typescript-eslint": "^8.24.0"
+    "typescript-eslint": "^8.24.0",
+    "@types/node": "^22.13.4"
   }
 }

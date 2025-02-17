@@ -117,6 +117,7 @@ export const apps = pgTable("apps", {
   logo: text("logo"),
   metaData: text("meta_data").notNull(),
   description: text("description").notNull(),
+  comingSoon: boolean("coming_soon").default(true).notNull(),
   createdAt: timestamp("created_at", {
     precision: 3,
     withTimezone: true,

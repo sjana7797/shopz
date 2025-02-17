@@ -7,7 +7,9 @@
     // Paths
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/*"]
+      "@api/*": ["src/*"],
+      "@repo/database/*": ["../../packages/database/src/*"],
+      "@repo/common/*": ["../../packages/common/src/*"]
     }
   }
 }

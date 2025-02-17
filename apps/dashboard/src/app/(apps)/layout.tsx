@@ -1,4 +1,4 @@
-import Header from "@/dashboard/features/apps/components/header";
+import Header from "@/dashboard/features/(apps)/apps/components/header";
 import React from "react";
 
 type Props = {

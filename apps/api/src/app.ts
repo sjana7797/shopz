@@ -3,6 +3,7 @@ import { apiReference } from "@scalar/hono-api-reference";
 import healthRouter from "@api/routes/health";
 import { cors } from "hono/cors";
 import appsRoutes from "@api/routes/apps";
+import { aiRoutes } from "@api/routes/ai";
 
 const app = createApp();
 
@@ -29,7 +30,7 @@ app.get(
 );
 
 // Routes
-const routes = [healthRouter, appsRoutes] as const;
+const routes = [healthRouter, appsRoutes, aiRoutes] as const;
 
 routes.forEach((route) => app.route("/", route));
 

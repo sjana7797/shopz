@@ -1,0 +1,9 @@
+{
+  "name": "@repo/common",
+  "version": "0.0.1",
+  "description": "Common package",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  }
+}
