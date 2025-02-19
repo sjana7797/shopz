@@ -4,7 +4,8 @@
   "description": "Database package",
   "type": "module",
   "exports": {
-    "./*": "./src/*.ts"
+    "./*": "./src/*.ts",
+    "./schema/*": "./src/schema/*.ts"
   },
   "scripts": {
     "db:studio": "drizzle-kit studio",

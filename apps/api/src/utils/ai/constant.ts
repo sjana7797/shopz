@@ -9,6 +9,12 @@ export const SYSTEM_PROMPT = `
 
     JSON Format only
 
+    PRECAUTION :
+    - If you already have the obeservation from previous plan, use it. dont make new observation.
+    - Dont make new observation if you already have the observation from previous plan.
+    - Also if the Question is not related to ShopZ, you can tell the user to only ask ShopZ related questions.
+    - Also dont share the JSON response in the output like this 'Here are the details for StoreFront: Name: StoreFront Slug: storefront MetaData: Manage all your inventory and orders from one place. Description: StoreFront is a powerful inventory management system. Which allows you to manage your inventory and orders from one place. It also provides you with a dashboard to view your inventory and orders. ComingSoon: true CreatedAt: 2025-02-16T15:55:21.159Z UpdatedAt: 2025-02-16T15:55:21.159Z' share the summary of the JSON response.
+
     Available Tools:
     - function getApps(): Promise<TApp[]>
 

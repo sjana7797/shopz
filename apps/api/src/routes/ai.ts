@@ -3,6 +3,7 @@ import { SYSTEM_PROMPT } from "@api/utils/ai/constant";
 import { autoPrompt, initAIModel } from "@api/utils/ai/helpers";
 import { tools } from "@api/utils/ai/tools";
 import { createRouter } from "@api/utils/create-app";
+import { logger } from "@api/utils/pino-logger";
 import { upgradeWebSocket } from "@api/websocket";
 import { Content, GoogleGenerativeAI } from "@google/generative-ai";
 import { streamText } from "hono/streaming";
@@ -10,23 +11,20 @@ import { streamText } from "hono/streaming";
 export const aiRoutes = createRouter().get(
   "/ai/chat",
   upgradeWebSocket(async (c) => {
+    let chat: GoogleGenerativeAI.Chat;
+    let history: Content[] = [
+      {
+        role: "model",
+        parts: [
+          {
+            text: "Hi there! How can I help you with ShopZ today?",
+          },
+        ],
+      },
+    ];
     return {
       async onMessage(evt, ws) {
-        console.log("message", evt.data);
-
-        const history: Content[] = [];
-
-        const apiKey = env.AI_API_KEY;
-        const genAI = new GoogleGenerativeAI(apiKey);
-
-        const model = genAI.getGenerativeModel({
-          model: "gemini-2.0-flash",
-          systemInstruction: SYSTEM_PROMPT,
-        });
-
-        const chat = model.startChat({
-          history: history,
-        });
+        logger.info("message", evt.data);
 
         let i = 0;
         let message = evt.data.toString();
@@ -60,11 +58,11 @@ export const aiRoutes = createRouter().get(
           // Remove triple backticks and extra spaces
           message = message.replace(/```json|```/g, "").trim();
 
-          console.log(message, "message");
+          logger.info(message, "message");
 
           const call = JSON.parse(message);
 
-          console.log(call, "call");
+          logger.info(call, "call");
 
           if (call.type === "output") {
             streamText(c, async (stream) => {
@@ -76,16 +74,6 @@ export const aiRoutes = createRouter().get(
               await stream.close();
             });
             break;
-            // return call?.output;
-            // return streamText(c, async (stream) => {
-            //   await stream.write("'START'");
-            //   for (const part of call?.output?.split(" ") ?? []) {
-            //     await stream.write(part + " ");
-            //     await stream.sleep(100);
-            //   }
-            //   await stream.write("'END'");
-            //   await stream.close();
-            // });
           } else if (call.type === "action") {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -118,8 +106,20 @@ export const aiRoutes = createRouter().get(
         }
       },
       onOpen(evt, ws) {
-        console.log("open", evt);
-        ws.send("hello");
+        logger.info("open", evt);
+        const apiKey = env.AI_API_KEY;
+        const genAI = new GoogleGenerativeAI(apiKey);
+
+        const model = genAI.getGenerativeModel({
+          model: "gemini-2.0-flash",
+          systemInstruction: SYSTEM_PROMPT,
+        });
+        history = [];
+        chat = model.startChat({
+          history: history,
+        });
+        ws.send("Hi there! How can I help you with ShopZ today?");
+        ws.send("'END'");
       },
     };
   }),

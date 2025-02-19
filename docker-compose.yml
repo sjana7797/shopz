@@ -19,6 +19,31 @@ services:
     volumes:
       - ./data/redis:/data
 
+  kafka:
+    image: confluentinc/cp-kafka
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+    depends_on:
+      - zookeeper
+    volumes:
+      - ./data/kafka:/var/lib/kafka/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    restart: always
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
 volumes:
   postgres:
   redis:
+  taskhive:
+  inventoryz:

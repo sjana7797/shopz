@@ -1,14 +1,11 @@
 import { createApp } from "@api/utils/create-app";
 import { apiReference } from "@scalar/hono-api-reference";
 import healthRouter from "@api/routes/health";
-import { cors } from "hono/cors";
 import appsRoutes from "@api/routes/apps";
 import { aiRoutes } from "@api/routes/ai";
+import { productRouter } from "./routes/product";
 
 const app = createApp();
-
-// Middlewares
-app.use(cors());
 
 // open api
 // The OpenAPI documentation will be available at /doc
@@ -30,7 +27,7 @@ app.get(
 );
 
 // Routes
-const routes = [healthRouter, appsRoutes, aiRoutes] as const;
+const routes = [healthRouter, appsRoutes, aiRoutes, productRouter] as const;
 
 routes.forEach((route) => app.route("/", route));
 

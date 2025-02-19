@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
 
-    // Paths
+    // paths
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["src/*"],
       "@repo/database/*": ["../../packages/database/src/*"],
       "@repo/common/*": ["../../packages/common/src/*"],
-      "@service/product/*": ["../../services/product/src/*"]
+      "@service/product/*": ["./src/*"]
     }
   }
 }

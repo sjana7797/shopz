@@ -1,4 +1,5 @@
 import { createRouter } from "@api/utils/create-app";
+import { logger } from "@api/utils/pino-logger";
 import { createRoute, z } from "@hono/zod-openapi";
 
 const healthRouter = createRouter().openapi(
@@ -22,6 +23,9 @@ const healthRouter = createRouter().openapi(
     },
   }),
   (c) => {
+    logger.info("health check");
+    logger.info(c.get("requestId"), "Request received for id");
+    logger.info("status", "ok");
     return c.json({ status: "ok" } as const);
   },
 );
