@@ -5,6 +5,7 @@ import {
   boolean,
   integer,
   uuid,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -14,6 +15,8 @@ export const users = pgTable("users", {
   emailVerified: boolean("email_verified")
     .$defaultFn(() => false)
     .notNull(),
+  phoneNumber: text("phone_number").unique(),
+  phoneNumberVerified: boolean("phone_number_verified"),
   image: text("image"),
   createdAt: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
@@ -66,10 +69,10 @@ export const verifications = pgTable("verifications", {
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
+    () => /* @__PURE__ */ new Date(),
   ),
   updatedAt: timestamp("updated_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
+    () => /* @__PURE__ */ new Date(),
   ),
 });
 
@@ -134,33 +137,108 @@ export const apikeys = pgTable("apikeys", {
   metadata: text("metadata"),
 });
 
-export const merchants = pgTable("merchants", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  pan: text("pan").unique().notNull(),
+export const ssoProviders = pgTable("sso_providers", {
+  id: text("id").primaryKey(),
+  issuer: text("issuer").notNull(),
+  oidcConfig: text("oidc_config"),
+  samlConfig: text("saml_config"),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+  providerId: text("provider_id").notNull().unique(),
+  organizationId: text("organization_id"),
+  domain: text("domain").notNull(),
 });
 
-export const companies = pgTable("companies", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  legalName: text("legal_name"),
-  merchantId: uuid("merchant_id")
+export const userProfile = pgTable("user_profile", {
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  pan: text("pan"),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  userId: text("user_id")
     .notNull()
-    .references(() => merchants.id, { onDelete: "cascade" }),
+    .unique()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
 });
 
-export const brands = pgTable("brands", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const workspace = pgTable("workspaces", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => companies.id, { onDelete: "cascade" }),
+  description: text("description"),
+  inviteCode: uuid("invite_code").notNull().defaultRandom().unique(),
+  ownerId: text("owner_id").notNull(),
+  createdAt: timestamp("created_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
 });
 
-export const outlets = pgTable("outlets", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const project = pgTable("projects", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
-  companyId: uuid("brand_id")
+  description: text("description"),
+  icon: text("icon").default("📊"),
+  inviteCode: uuid("invite_code").notNull().defaultRandom().unique(),
+  workspaceId: integer("workspace_id")
     .notNull()
-    .references(() => brands.id, { onDelete: "cascade" }),
+    .references(() => workspace.id),
+  createdBy: text("created_by").notNull(),
+  createdAt: timestamp("created_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+});
+
+export const taskStatusEnum = pgEnum("TaskStatus", [
+  "BACKLOG",
+  "TODO",
+  "IN_PROGRESS",
+  "IN_REVIEW",
+  "DONE",
+]);
+
+export const taskPriorityEnum = pgEnum("TaskPriority", [
+  "LOW",
+  "MEDIUM",
+  "HIGH",
+  "URGENT",
+]);
+
+export const task = pgTable("tasks", {
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  taskCode: text("task_code").unique().notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  projectId: integer("project_id")
+    .notNull()
+    .references(() => project.id),
+  workspaceId: integer("workspace_id")
+    .notNull()
+    .references(() => workspace.id),
+  status: taskStatusEnum("status").default("BACKLOG"),
+  priority: taskPriorityEnum("priority").default("LOW"),
+  createdBy: text("created_by").notNull(),
+  assignedTo: text("assigned_to").notNull(),
+  createdAt: timestamp("created_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    withTimezone: true,
+  }).defaultNow(),
 });
